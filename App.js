@@ -1,20 +1,47 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import * as Font from 'expo-font';
+import AppLoading from 'expo-app-loading';
+import Home from './screens/Home';
+import { View } from 'react-native';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+const getFonts = async () => {
+  return await Font.loadAsync({
+    'nunito-regular': require('./assets/fonts/Nunito-Regular.ttf'),
+    'nunito-bold': require('./assets/fonts/Nunito-Bold.ttf')
+  })
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default function App() {
+  const [ fontsLoaded, setFontsLoaded ] = useState(false);
+  
+  useEffect(() => {
+    getFonts().then( _ => {
+      setFontsLoaded(true)
+    })
+  }, [fontsLoaded])
+
+  return(
+    <View>
+      { fontsLoaded && <Home />}
+    </View>
+  )
+}
+
+// export default function App() {
+//   const [ fontsLoaded, setFontsLoaded ] = useState(false);
+  
+//   if(fontsLoaded){
+//     return (
+//       <Home />
+//     );
+//   } else {
+//     return (
+//       <AppLoading 
+//         startAsync={getFonts}
+//         onFinish={() => setFontsLoaded(true)}
+//         onError={() => console.log('error')}
+//       />
+//     )
+//   }
+// }
